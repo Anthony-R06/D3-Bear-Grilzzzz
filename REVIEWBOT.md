@@ -140,6 +140,8 @@ the team to go deeper in that direction. Be specific, and
 offer a prompt or a "what if," not a task. A plain world gets a light invitation. Creative depth should come from their own idea, so do
 not pitch a different game, and do not ask them to add scope before the core works.
 
+Game Idea: Bear Grylls is dropped into the middle of wilderness and has to collect things to survive and escape to a helicopter somewhere far. This idea is very flexible and likley to change and evolve. This is the besic premise of the project we
+
 # Naming patterns
 
 When a named pattern truly describes the code, name it and link a source. Prefer
