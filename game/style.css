@@ -81,3 +81,52 @@ body {
     rgb(0 0 0 / 0.5) 100%
   );
 }
+
+/* Inventory */
+#inventory {
+  margin-top: 12px;
+  padding: 12px;
+  background: #000000;
+  border: 1px solid #000000;
+  border-radius: 6px;
+}
+
+#inventory h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+#inventory-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#inventory-empty {
+  margin: 0;
+  color: #8790a1;
+  font-size: 12px;
+}
+
+.inventory-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: #000000;
+  border-radius: 4px;
+}
+
+.inventory-icon {
+  font-size: 20px;
+}
+
+.inventory-name {
+  flex: 1;
+  text-transform: cpaitalize;
+}
+
+.inventory-count {
+  font-weight: bold;
+  color: #76e917;
+}
