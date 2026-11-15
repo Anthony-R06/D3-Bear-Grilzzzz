@@ -1,6 +1,7 @@
 // The rules of the game. There is no clock here: a command updates the state at
 // once, and the events it returns are a record of what happened. Whoever called
 // apply() decides how, or whether, to show them over time.
+import { RECIPES } from "./recipes.ts";
 
 import {
   isPassable,
@@ -25,14 +26,17 @@ export type GameState = {
 // Command: https://gameprogrammingpatterns.com/command.html
 export type Command =
   | { type: "move"; direction: Direction }
-  | { type: "gather" };
+  | { type: "gather" }
+  | { type: "craft"; item: string };
 
 // Domain Event: https://martinfowler.com/eaaDev/DomainEvent.html
 export type GameEvent =
   | { type: "moved"; from: Cell; to: Cell }
   | { type: "blocked"; at: Cell; toward: Cell; terrain: Terrain }
   | { type: "gathered"; at: Cell; item: string; terrain: Terrain }
-  | { type: "gatherFailed"; at: Cell };
+  | { type: "gatherFailed"; at: Cell }
+  | { type: "crafted"; item: string; inventory: Record<string, number> }
+  | { type: "craftFailed"; item: string; missing: Record<string, number> };
 
 const STEPS: Record<Direction, Cell> = {
   north: { x: 0, y: -1 },
@@ -64,6 +68,8 @@ export function apply(state: GameState, command: Command): GameEvent[] {
       return move(state, command.direction);
     case "gather":
       return gather(state);
+    case "craft":
+      return craft(state, command.item);
   }
 }
 
@@ -98,4 +104,60 @@ function gather(state: GameState): GameEvent[] {
   const newTerrain: Terrain = "grass";
   state.changedCells[cell] = newTerrain;
   return [{ type: "gathered", at, item, terrain: newTerrain }];
+}
+
+export function missingMaterials(
+  state: GameState,
+  item: string,
+): Record<string, number> {
+  const recipe = RECIPES.find((r) => r.name === item);
+  const missing: Record<string, number> = {};
+
+  if (!recipe) return missing;
+
+  for (const material in recipe.needs) {
+    const needed = recipe.needs[material];
+    const has = state.inventory[material] ?? 0;
+
+    if (has < needed) {
+      missing[material] = needed - has;
+    }
+  }
+
+  return missing;
+}
+
+function craft(state: GameState, item: string): GameEvent[] {
+  const recipe = RECIPES.find((r) => r.name === item);
+
+  if (!recipe) {
+    return [{
+      type: "craftFailed",
+      item,
+      missing: {},
+    }];
+  }
+
+  const missing = missingMaterials(state, item);
+
+  if (Object.keys(missing).length > 0) {
+    return [{
+      type: "craftFailed",
+      item,
+      missing,
+    }];
+  }
+
+  //use the materials
+  for (const material in recipe.needs) {
+    state.inventory[material] -= recipe.needs[material];
+  }
+
+  state.inventory[item] = (state.inventory[item] ?? 0) + 1; //give the player the new item
+
+  return [{
+    type: "crafted",
+    item,
+    inventory: { ...state.inventory },
+  }];
 }
