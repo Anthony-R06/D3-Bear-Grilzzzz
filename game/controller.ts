@@ -36,6 +36,11 @@ export class Controller {
     addEventListener("blur", () => this.held = []);
   }
 
+  public craftItem(item: string) { //craft an item when the player clicks a button
+    this.pressed = { type: "craft", item: item };
+    this.next();
+  }
+
   private keyDown(event: KeyboardEvent) {
     if (event.ctrlKey || event.metaKey || event.altKey) return;
 

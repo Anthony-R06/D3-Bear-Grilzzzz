@@ -130,3 +130,38 @@ body {
   font-weight: bold;
   color: #76e917;
 }
+
+#crafting {
+  padding: 12px;
+  background: #20252b;
+  border: 1px solid #3a3f48;
+  border-radius: 6px;
+}
+
+#crafting h2 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+#recipe-list {
+  list-style: none;
+  padding: 0;
+}
+
+#recipe-list li {
+  margin-bottom: 8px;
+}
+
+#recipe-list button {
+  width: 100%;
+  padding: 10px;
+  color: white;
+  background: #344b39;
+  border: 1px solid #56725c;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#recipe-list button:hover {
+  background: #456b4d;
+}

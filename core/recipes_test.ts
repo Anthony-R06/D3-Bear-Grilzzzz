@@ -1,5 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { apply, newGame } from "./mod.ts";
+import { RECIPES, TERRAIN_YIELDS } from "./mod.ts";
 
 Deno.test("crafting rope works with enough wood", () => {
   const state = newGame(121);
@@ -32,4 +33,26 @@ Deno.test("crafting a raft uses wood and rope", () => {
   assertEquals(state.inventory["wood"], 0);
   assertEquals(state.inventory["rope"], 0);
   assertEquals(state.inventory["raft"], 1);
+});
+
+Deno.test("every recipe ingredient has a source", () => {
+  const available = new Set<string>();
+
+  for (const item of Object.values(TERRAIN_YIELDS)) { //items we can collect from the map
+    if (item !== null) {
+      available.add(item);
+    }
+  }
+
+  for (const recipe of RECIPES) { //items we can make from recipes
+    available.add(recipe.name);
+  }
+
+  for (const recipe of RECIPES) { //check every ingredient
+    for (const item of Object.keys(recipe.needs)) {
+      if (!available.has(item)) {
+        throw new Error(`${item} has no source`);
+      }
+    }
+  }
 });

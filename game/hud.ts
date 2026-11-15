@@ -82,7 +82,7 @@ export class Hud {
 
     //if the player has not picked up the item before
     if (!entry) {
-      element("inventory-empty").remove();
+      document.getElementById("inventory-empty")?.remove();
 
       const row = document.createElement("div");
       row.className = "inventory-item";
@@ -91,7 +91,17 @@ export class Hud {
       const icon = document.createElement("span");
       icon.className = "inventory-icon";
       //add in more icons later
-      icon.textContent = "🪵";
+      if (item === "wood") {
+        icon.textContent = "🪵";
+      } else if (item === "rope") {
+        icon.textContent = "🧵";
+      } else if (item === "raft") {
+        icon.textContent = "🛶";
+      } else if (item === "fish") {
+        icon.textContent = "🐟";
+      } else {
+        icon.textContent = "📦";
+      }
 
       const name = document.createElement("span");
       name.className = "inventory-name";
