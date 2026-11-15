@@ -55,3 +55,11 @@ Deno.test("a cell cannot be gathered twice", () => {
     at,
   }]);
 });
+
+Deno.test("gather event stays the same", () => {
+  const state = onTerrain(SEED, "jungle");
+  const events = apply(state, { type: "gather" }); //pick up wood
+  const saved = JSON.parse(JSON.stringify(events)); //save the original event
+  apply(state, { type: "gather" }); //try picking up again
+  assertEquals(events, saved); //the first event should still be the same
+});

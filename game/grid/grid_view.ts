@@ -89,7 +89,7 @@ export class GridView extends Phaser.Scene {
         const key = `${event.at.x},${event.at.y}`;
         this.changedCells[key] = event.terrain;
         this.drawCellsAround(event.at);
-        return Promise.resolve();
+        return this.gatherAnimation();
       }
       case "gatherFailed":
         return Promise.resolve();
@@ -125,6 +125,22 @@ export class GridView extends Phaser.Scene {
         yoyo: true,
         onComplete: () => {
           this.marker.setFillStyle(MARKER_COLOR);
+          done();
+        },
+      });
+    });
+  }
+
+  private gatherAnimation(): Promise<void> {
+    //make the player grow a little when picking up an item
+    return new Promise((done) => {
+      this.tweens.add({
+        targets: this.marker,
+        scale: 1.3,
+        duration: 150,
+        yoyo: true,
+        onComplete: () => {
+          this.marker.setScale(1);
           done();
         },
       });
