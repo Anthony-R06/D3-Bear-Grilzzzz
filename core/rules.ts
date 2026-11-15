@@ -31,7 +31,7 @@ export type Command =
 export type GameEvent =
   | { type: "moved"; from: Cell; to: Cell }
   | { type: "blocked"; at: Cell; toward: Cell; terrain: Terrain }
-  | { type: "gathered"; at: Cell; item: string }
+  | { type: "gathered"; at: Cell; item: string; terrain: Terrain }
   | { type: "gatherFailed"; at: Cell };
 
 const STEPS: Record<Direction, Cell> = {
@@ -75,7 +75,7 @@ function move(state: GameState, direction: Direction): GameEvent[] {
   // Cells in events act as a Value Object: https://martinfowler.com/bliki/ValueObject.html
   const from = { ...state.player };
   const to = { x: from.x + step.x, y: from.y + step.y };
-  const terrain = terrainAt(state.seed, to.x, to.y);
+  const terrain = currentTerrain(state, to.x, to.y);
   if (!isPassable(terrain)) {
     return [{ type: "blocked", at: from, toward: to, terrain }];
   }
@@ -95,6 +95,7 @@ function gather(state: GameState): GameEvent[] {
     return [{ type: "gatherFailed", at }];
   }
   state.inventory[item] = (state.inventory[item] ?? 0) + 1;
-  state.changedCells[cell] = "grass";
-  return [{ type: "gathered", at, item }];
+  const newTerrain: Terrain = "grass";
+  state.changedCells[cell] = newTerrain;
+  return [{ type: "gathered", at, item, terrain: newTerrain }];
 }

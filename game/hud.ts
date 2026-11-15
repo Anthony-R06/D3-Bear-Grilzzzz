@@ -1,4 +1,9 @@
-import { type GameEvent, type GameState, terrainAt } from "../core/mod.ts";
+import {
+  type GameEvent,
+  type GameState,
+  type Terrain,
+  terrainAt,
+} from "../core/mod.ts";
 
 function element(id: string): HTMLElement {
   return document.getElementById(id)!;
@@ -21,19 +26,30 @@ function describe(event: GameEvent): string {
 // tools can read. It changes only as events play.
 export class Hud {
   private readonly seed: number;
+  private readonly changedCells: Record<string, Terrain>;
 
   constructor(state: GameState) {
     this.seed = state.seed;
+    this.changedCells = { ...state.changedCells };
     this.showPosition(state.player.x, state.player.y);
   }
 
   show(event: GameEvent) {
     element("live").textContent = describe(event);
     if (event.type === "moved") this.showPosition(event.to.x, event.to.y);
+    if (event.type === "gathered") {
+      const cell = `${event.at.x},${event.at.y}`;
+      this.changedCells[cell] = event.terrain;
+      this.showPosition(event.at.x, event.at.y);
+    }
   }
 
   private showPosition(x: number, y: number) {
     element("position").textContent = `${x}, ${y}`;
-    element("terrain").textContent = terrainAt(this.seed, x, y);
+
+    const cell = `${x},${y}`;
+
+    element("terrain").textContent = this.changedCells[cell] ??
+      terrainAt(this.seed, x, y);
   }
 }

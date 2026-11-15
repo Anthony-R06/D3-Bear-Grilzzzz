@@ -18,6 +18,7 @@ Deno.test("gathering from jungle adds wood to inventory", () => {
     type: "gathered",
     at,
     item: "wood",
+    terrain: "grass",
   }]);
 });
 
