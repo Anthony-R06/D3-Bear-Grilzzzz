@@ -20,8 +20,14 @@ export function terrainAt(seed: number, x: number, y: number): Terrain {
   return noise(seed + 2, x, y, 6) < 0.45 ? "jungle" : "grass";
 }
 
-export function isPassable(terrain: Terrain): boolean {
-  return terrain !== "river" && terrain !== "mountain";
+export function isPassable(terrain: Terrain, hasRaft = false): boolean {
+  if (terrain == "mountain") {
+    return false;
+  }
+  if (terrain == "river" && !hasRaft) {
+    return false;
+  }
+  return true;
 }
 
 // Value noise: random numbers at coarse grid points, blended between them, so

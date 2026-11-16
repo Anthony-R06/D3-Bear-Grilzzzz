@@ -43,7 +43,6 @@ Deno.test("every recipe ingredient has a source", () => {
       available.add(item);
     }
   }
-  
 
   for (const recipe of RECIPES) { //items we can make from recipes
     available.add(recipe.name);

@@ -82,7 +82,9 @@ function move(state: GameState, direction: Direction): GameEvent[] {
   const from = { ...state.player };
   const to = { x: from.x + step.x, y: from.y + step.y };
   const terrain = currentTerrain(state, to.x, to.y);
-  if (!isPassable(terrain)) {
+  const hasRaft = (state.inventory["raft"] ?? 0) > 0;
+
+  if (!isPassable(terrain, hasRaft)) {
     return [{ type: "blocked", at: from, toward: to, terrain }];
   }
   state.player.x = to.x;
