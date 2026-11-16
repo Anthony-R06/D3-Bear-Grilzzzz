@@ -35,12 +35,13 @@ export class RecipeBook {
       const missing = missingMaterials(this.state, recipe.name);
 
       if (Object.keys(missing).length === 0) {
-        this.buttons[i].textContent = `Craft ${recipe.name} (Ready)`;
+        this.buttons[i].disabled = false;
+        this.buttons[i].textContent = `Craft ${recipe.name} `;
       } else {
         const materials = Object.entries(missing)
           .map(([item, count]) => `${count} ${item}`)
           .join(", ");
-
+        this.buttons[i].disabled = true;
         this.buttons[i].textContent =
           `Craft ${recipe.name} (Need ${materials})`;
       }

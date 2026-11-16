@@ -162,6 +162,16 @@ body {
   cursor: pointer;
 }
 
-#recipe-list button:hover {
+#recipe-list button:disabled {
+  width: 100%;
+  padding: 10px;
+  color: white;
+  background: #202e23;
+  border: 1px solid #56725c;
+  border-radius: 4px;
+  cursor: not-allowed;
+}
+
+#recipe-list button:hover:not(:disabled) {
   background: #456b4d;
 }
