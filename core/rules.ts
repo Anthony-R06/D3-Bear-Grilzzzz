@@ -1,7 +1,7 @@
 // The rules of the game. There is no clock here: a command updates the state at
 // once, and the events it returns are a record of what happened. Whoever called
 // apply() decides how, or whether, to show them over time.
-import { RECIPES } from "./recipes.ts";
+import { RECIPES, WIN_ITEM } from "./recipes.ts";
 
 import {
   isPassable,
@@ -21,6 +21,7 @@ export type GameState = {
   player: Cell;
   inventory: Record<string, number>;
   changedCells: Record<string, Terrain>;
+  won: boolean;
 };
 
 // Command: https://gameprogrammingpatterns.com/command.html
@@ -36,7 +37,8 @@ export type GameEvent =
   | { type: "gathered"; at: Cell; item: string; terrain: Terrain }
   | { type: "gatherFailed"; at: Cell }
   | { type: "crafted"; item: string; inventory: Record<string, number> }
-  | { type: "craftFailed"; item: string; missing: Record<string, number> };
+  | { type: "craftFailed"; item: string; missing: Record<string, number> }
+  | { type: "won" };
 
 const STEPS: Record<Direction, Cell> = {
   north: { x: 0, y: -1 },
@@ -47,7 +49,13 @@ const STEPS: Record<Direction, Cell> = {
 
 // Singleton, avoided on purpose: tests make as many games as they need. https://gameprogrammingpatterns.com/singleton.html
 export function newGame(seed: number): GameState {
-  return { seed, player: { x: 0, y: 0 }, inventory: {}, changedCells: {} };
+  return {
+    seed,
+    player: { x: 0, y: 0 },
+    inventory: {},
+    changedCells: {},
+    won: false,
+  };
 }
 
 export function currentTerrain(
@@ -63,6 +71,7 @@ export function currentTerrain(
 
 // The single way in. It updates the state it is given and returns the events.
 export function apply(state: GameState, command: Command): GameEvent[] {
+  if (state.won) return [];
   switch (command.type) {
     case "move":
       return move(state, command.direction);
@@ -157,9 +166,16 @@ function craft(state: GameState, item: string): GameEvent[] {
 
   state.inventory[item] = (state.inventory[item] ?? 0) + 1; //give the player the new item
 
-  return [{
+  const events: GameEvent[] = [{
     type: "crafted",
     item,
     inventory: { ...state.inventory },
   }];
+
+if (item === WIN_ITEM) {
+    state.won = true;
+    events.push({ type: "won" });
+  }
+
+return events;
 }

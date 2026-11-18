@@ -198,3 +198,22 @@ body {
   font-weight: bold;
   color: #ff0000;
 }
+
+#goal,
+#win-banner {
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid #56725c;
+  border-radius: 6px;
+  background: #202e23;
+  color: white;
+}
+
+#win-banner {
+  background: #355d42;
+  border-color: #e9cb7a;
+}
+
+#win-banner[hidden] {
+  display: none;
+}

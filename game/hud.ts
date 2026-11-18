@@ -21,6 +21,8 @@ function describe(event: GameEvent): string {
       return `nothing to gather at ${event.at.x}, ${event.at.y}`;
     case "crafted":
       return `crafted ${event.item}!`;
+    case "won":
+      return "Rescue successful! You made it home.";
 
     case "craftFailed": {
       const missing = Object.entries(event.missing)
@@ -55,6 +57,9 @@ export class Hud {
   }
 
   show(event: GameEvent) {
+    if (event.type === "won") {
+      element("win-banner").hidden = false;
+    }
     element("live").textContent = describe(event);
     if (event.type === "moved") this.showPosition(event.to.x, event.to.y);
     if (event.type === "gathered") {
