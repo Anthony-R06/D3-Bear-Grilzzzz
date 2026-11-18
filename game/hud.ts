@@ -72,6 +72,9 @@ export class Hud {
           this.showGathered(item);
         }
       }
+      if (event.item === "map") {
+        this.showMapCoordinates();
+      }
     }
   }
 
@@ -97,6 +100,8 @@ export class Hud {
         icon.textContent = "🧵";
       } else if (item === "raft") {
         icon.textContent = "🛶";
+      } else if (item === "map") {
+        icon.textContent = "🗺️";
       } else if (item === "fish") {
         icon.textContent = "🐟";
       } else {
@@ -129,5 +134,14 @@ export class Hud {
 
     element("terrain").textContent = this.changedCells[cell] ??
       terrainAt(this.seed, x, y);
+  }
+
+  private showMapCoordinates() {
+    //escape coordinates
+    const x = 54;
+    const y = -27;
+
+    element("map-coordinates").hidden = false;
+    element("map-location").textContent = `Coordinates: ${x}, ${y}`;
   }
 }

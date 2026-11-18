@@ -12,6 +12,10 @@ export const RECIPES: Recipe[] = [
     name: "raft",
     needs: { wood: 3, rope: 1 },
   },
+  {
+    name: "map",
+    needs: { wood: 3 },
+  },
 ];
 
 //function that makes sure every item can be crafted

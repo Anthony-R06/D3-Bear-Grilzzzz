@@ -175,3 +175,26 @@ body {
 #recipe-list button:hover:not(:disabled) {
   background: #456b4d;
 }
+
+#map-coordinates {
+  padding: 12px;
+  background: #B9A37E;
+  border: 1px solid #000000;
+  border-radius: 6px;
+}
+
+#map-coordinates h2 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+#map-coordinates p {
+  margin-bottom: 4px;
+}
+
+#map-location {
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
+}
