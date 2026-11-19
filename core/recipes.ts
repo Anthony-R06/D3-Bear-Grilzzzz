@@ -3,7 +3,7 @@ export type Recipe = {
   needs: Record<string, number>;
 }; //items the player can make
 
-export const WIN_ITEM = "rescue_signal";
+export const WIN_ITEM = "rescue signal";
 
 export const RECIPES: Recipe[] = [
   {
@@ -19,8 +19,8 @@ export const RECIPES: Recipe[] = [
     needs: { wood: 3 },
   },
   {
-    name: "rescue_signal",
-    needs: { raft: 1, map: 1, fish: 1 },
+    name: "rescue signal",
+    needs: { fish: 1 },
   },
 ];
 

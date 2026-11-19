@@ -12,6 +12,8 @@ import {
 
 export type Cell = { x: number; y: number };
 
+export const winCell: Cell = { x: 54, y: -27 };
+
 export type Direction = "north" | "south" | "east" | "west";
 
 // Plain data that survives JSON. Terrain is absent because the seed can recompute
@@ -98,7 +100,7 @@ function move(state: GameState, direction: Direction): GameEvent[] {
   }
   state.player.x = to.x;
   state.player.y = to.y;
-  return [{ type: "moved", from, to }];
+  return [{ type: "moved", from, to }, ...winState(state)];
 }
 
 function gather(state: GameState): GameEvent[] {
@@ -172,10 +174,21 @@ function craft(state: GameState, item: string): GameEvent[] {
     inventory: { ...state.inventory },
   }];
 
-if (item === WIN_ITEM) {
+  events.push(...winState(state));
+
+  return events;
+}
+
+function winState(state: GameState): GameEvent[] {
+  const hasWinItem = (state.inventory[WIN_ITEM] ?? 0) > 0;
+
+  const atWinCell = state.player.x === winCell.x &&
+    state.player.y === winCell.y;
+
+  if (hasWinItem && atWinCell) {
     state.won = true;
-    events.push({ type: "won" });
+    return [{ type: "won" }];
   }
 
-return events;
+  return [];
 }
