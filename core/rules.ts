@@ -114,9 +114,14 @@ function gather(state: GameState): GameEvent[] {
     return [{ type: "gatherFailed", at }];
   }
   state.inventory[item] = (state.inventory[item] ?? 0) + 1;
-  const newTerrain: Terrain = "grass";
-  state.changedCells[cell] = newTerrain;
-  return [{ type: "gathered", at, item, terrain: newTerrain }];
+  console.log(terrain);
+  if (terrain == "jungle") {
+    const newTerrain: Terrain = "grass";
+    state.changedCells[cell] = newTerrain;
+    return [{ type: "gathered", at, item, terrain: newTerrain }];
+  } else {
+    return [{ type: "gathered", at, item, terrain: terrain }];
+  }
 }
 
 export function missingMaterials(
